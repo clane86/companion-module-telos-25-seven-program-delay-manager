@@ -1,12 +1,12 @@
 # companion-module-pdm-broadcast-delay
 
-Companion module for the Telos 25-Seven PDM / PDM II Broadcast Delay using the Serial Remote Control protocol over TCP.
+Companion module for the **Telos 5-Seven PDM / PDM II Broadcast Delay** using the Serial Remote Control protocol over TCP.
 
 For the easiest implementation, the preset buttons in this module are designed to mimic the front panel buttons of the PDM unit.
 
-For more advanced use, you can use the Send Raw Command action and refer to the last_response variable for a more custom approach. Refer to the PDM manual on the Telos website for exact commands (careful, they're case-sensitive!)
+For more advanced use, you can use the *Send Raw Command* action and refer to the *last_response* variable for a more custom approach. Refer to the PDM manual on the Telos website for exact commands (careful, they're case-sensitive!)
 
-WARNING: disabling any reporting via raw command can negatively affect feedbacks and variables!
+**WARNING:** disabling any reporting via raw command can negatively affect feedbacks and variables!
 
 ## Configuration
 
