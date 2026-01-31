@@ -1,32 +1,73 @@
-# Generic TCP and UDP module
+# 25-Seven PDM/PDM II Broadcast Delay
 
-A generic module for performing simple TCP and UDP requests
+Control a PDM or PDM II Broadcast Delay using the Serial Remote Control protocol over TCP.
 
-If you are using this plugin, you are trying to control some device or software that is not directly supported yet, and we would therefore really appreciate if you made a module request for it here:
+For the easiest implementation, the preset buttons in this module are designed to mimic the front panel buttons of the PDM unit.
 
-<https://github.com/bitfocus/companion-module-requests/issues>
+For more advanced use, you can use the Send Raw Command action and refer to the last_response variable for a more custom approach. Refer to the PDM manual on the Telos website for exact commands (careful, they're case-sensitive!)
 
-Many more internal variables and feedbacks are possible specific modules and more people will get to benefit from these in the future, thanks.
+WARNING: disabling any reporting via raw command can negatively affect feedbacks and variables!
 
 ## Configuration
 
-| Option                | Description                                                     |
-| --------------------- | --------------------------------------------------------------- |
-| Target IP             | Destination Host name / IP                                      |
-| Target Port           | Destination port                                                |
-| TCP/UDP               | Connection protocol to use                                      |
-| Save TCP Response*    | Option to save the last response received via TCP               |
-| Convert TCP Response* | Optionally convert response to 'String' or 'Hex' encoded string |
+| Option   | Description                |
+| -------- | -------------------------- |
+| Host     | PDM or PDM II IP/hostname    |
+| Port     | TCP port (default 5443)     |
+| Delay Poll Interval | Milliseconds between delay polls (only when DelayFull=0) |
 
-\* only available if protocol is set to TCP
+
 
 ## Actions
 
-| Action           | Description                                                                   |
-| ---------------- | ----------------------------------------------------------------------------- |
-| Send Command     | Send printable characters, with optional termination sequence                 |
-| Send HEX Command | Send a HEX encoded sequence of characters, with optional termination sequence |
+| Action | Description |
+| ------ | ----------- |
+| Down (press/start) | Send `down <Argument>` |
+| Up (release/end) | Send `up <Argument>` |
+| Trigger (momentary) | Send `trigger <Argument>` |
+| Get Variable | Send `get <Variable>` |
+| Send Raw Command | Send a raw command line (LF appended) |
+
 
 ## Variables
 
-If enabled, the last response received via TCP will be stored in `$(NAME:tcp_response)`
+| Variable | Description |
+| -------- | ----------- |
+| `$(NAME:depth)` | Current delay length in seconds (as reported) |
+| `$(NAME:peak_input)` | Peak input level in dBFS |
+| `$(NAME:peak_output)` | Peak output level in dBFS |
+| `$(NAME:temperature_c)` | Internal temperature in °C |
+| `$(NAME:temperature_f)` | Internal temperature in °F |
+| `$(NAME:last_response)` | Last line received from the device |
+
+
+Each event also exposes a variable in the form:
+
+- `$(NAME:<eventname>)` (lowercase)
+
+Example:
+
+- `$(NAME:delayfull)`
+- `$(NAME:muted)`
+
+## Feedbacks
+
+| Feedback | Active when |
+| -------- | ----------- |
+| Delay Full | `Delay is fully built up` |
+| Build Lamp | `Build button would be illuminated` |
+| Exit Lamp | `Exit button would be illuminated` |
+| Cough Lamp | `Cough button would be illuminated` |
+| Bypass Active | `Bypass is engaged` |
+
+## Presets
+
+- DUMP, BUILD, EXIT, COUGH, BYPASS (with matching feedbacks)
+- Delay Display (shows `Delay` value)
+
+
+## Operational Disclaimer
+
+This module is provided as-is. Use at your own risk. In broadcast airchains,
+test thoroughly and ensure appropriate safeguards. The authors are not
+responsible for on-air content or operational impact.

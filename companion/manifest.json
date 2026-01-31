@@ -1,28 +1,16 @@
 {
-	"id": "generic-tcp-udp",
-	"name": "generic-tcp-udp",
-	"shortname": "tcp-udp",
-	"description": "Generic TCP and UDP",
-	"version": "0.0.0",
+	"id": "pdm-broadcast-delay",
+	"name": "pdm-broadcast-delay",
+	"shortname": "pdm",
+	"description": "PDM / PDM II Broadcast Delay (Serial Remote Control over TCP)",
+	"version": "1.0.0",
 	"license": "MIT",
-	"repository": "git+https://github.com/bitfocus/companion-module-generic-tcp-udp.git",
-	"bugs": "https://github.com/bitfocus/companion-module-generic-tcp-udp/issues",
+	"repository": "git+https://github.com/clane86/companion-module-pdm-broadcast-delay",
+	"bugs": "https://github.com/clane86/companion-module-pdm-broadcast-delay/issues",
 	"maintainers": [
 		{
-			"name": "Andreas H. Thomsen",
-			"email": "mc-hauge@hotmail.com"
-		},
-		{
-			"name": "Andrew Broughton",
-			"email": "andy@checkcheckonetwo.com"
-		},
-		{
-			"name": "John A Knight Jr",
-			"email": "istnv@ayesti.com"
-		},
-		{
-			"name": "Joseph Adams",
-			"email": "josephdadams@gmail.com"
+			"name": "Chris Lane",
+			"email": "clane86@gmail.com"
 		}
 	],
 	"legacyIds": [],
@@ -32,7 +20,7 @@
 		"apiVersion": "0.0.0",
 		"entrypoint": "../index.js"
 	},
-	"manufacturer": "Generic",
-	"products": ["TCP and UDP Requests"],
-	"keywords": ["Protocol", "Generic"]
+	"manufacturer": "Telos",
+	"products": ["25-Seven PDM/PDM II Broadcast Delay"],
+	"keywords": ["PDM", "PDM II", "Broadcast Delay", "TCP"]
 }

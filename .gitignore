@@ -2,3 +2,5 @@ node_modules/
 DEBUG-INSPECT
 /pkg
 /pkg.tgz
+.DS_Store
+/pkg 2

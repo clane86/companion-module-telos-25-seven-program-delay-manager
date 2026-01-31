@@ -10,23 +10,10 @@ export const ConfigFields = [
 		label: 'Information',
 		width: 12,
 		value: `
-				<div class="alert alert-danger">
-					<h3>IMPORTANT MESSAGE</h3>
+				<div class="alert alert-info">
+					<h3>PDM / PDM II Serial Remote Control</h3>
 					<div>
-						<strong>Please read and understand the following before using this module</strong>
-						<br>
-						The companion project is designed to make the everyday life of a technician easier.
-						We prefer to have ready made actions, presets and feedbacks for as many products as possible.<p>
-            This generic TCP/UDP module is intended for testing or small-scale products.
-						<ul>
-							<li>You shoudn't need to find, program and send raw TCP commands</li>
-							<li>If you have or use a product we don't support, please file a module request for it</li>
-							<li>Do you think your product/device is too insignificant to make a module for? It's probably not.</li>
-							<li>Properitary/inhouse products can also have their own modules.</li>
-							<li>With generic modules you won't get nice things like presets and feedback</li>
-						</ul>
-						<a href="https://github.com/bitfocus/companion-module-requests/issues" target="_new" class="btn btn-warning mr-1">See current requests</a>
-						<a href="https://github.com/bitfocus/companion-module-requests/issues/new" target="_new" class="btn btn-success">Request support for a product</a>
+						This module connects to the PDM or PDM II Broadcast Delay over TCP.
 					</div>
 				</div>
 			`,
@@ -34,45 +21,30 @@ export const ConfigFields = [
 	{
 		type: 'textinput',
 		id: 'host',
-		label: 'Target Host name or IP',
+		label: 'PDM/PDM II Host name or IP',
 		width: 8,
 		regex: REGEX_IP_OR_HOST,
 	},
 	{
 		type: 'textinput',
 		id: 'port',
-		label: 'Target Port',
+		label: 'PDM/PDM II TCP Port',
 		width: 4,
-		default: 7000,
+		default: 5443,
 		regex: Regex.PORT,
 	},
 	{
-		type: 'dropdown',
-		id: 'prot',
-		label: 'Connect with TCP / UDP',
-		default: 'tcp',
-		choices: [
-			{ id: 'tcp', label: 'TCP' },
-			{ id: 'udp', label: 'UDP' },
-		],
+		type: 'textinput',
+		id: 'poll_interval',
+		label: 'Delay Poll Interval (ms)',
+		width: 4,
+		default: 1000,
+		regex: Regex.NUMBER,
 	},
 	{
 		type: 'checkbox',
-		id: 'saveresponse',
-		label: 'Save TCP Response',
+		id: 'debug_logging',
+		label: 'Enable Debug Logging',
 		default: false,
-		isVisible: (configValues) => configValues.prot === 'tcp',
-	},
-	{
-		type: 'dropdown',
-		id: 'convertresponse',
-		label: 'Convert TCP Response Format',
-		default: 'none',
-		choices: [
-			{ id: 'none', label: 'No conversion' },
-			{ id: 'hex', label: 'To Hex' },
-			{ id: 'string', label: 'To String' },
-		],
-		isVisible: (configValues) => configValues.prot === 'tcp' && !!configValues.saveresponse,
 	},
 ]

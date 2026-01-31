@@ -1,6 +1,6 @@
 {
-	"name": "generic-tcp-udp",
-	"version": "2.2.1",
+	"name": "pdm-broadcast-delay",
+	"version": "1.0.0",
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
@@ -8,7 +8,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/bitfocus/companion-module-generic-tcp-udp.git"
+		"url": "git+https://github.com/clane86/companion-module-pdm-broadcast-delay"
 	},
 	"license": "MIT",
 	"dependencies": {

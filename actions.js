@@ -1,120 +1,123 @@
-const CHOICES_END = [
-	{ id: '', label: 'None' },
-	{ id: '\n', label: 'LF - \\n (Common UNIX/Mac)' },
-	{ id: '\r\n', label: 'CRLF - \\r\\n (Common Windows)' },
-	{ id: '\r', label: "CR - \\r (1970's RS232 terminal)" },
-	{ id: '\x00', label: 'NULL - \\x00 (Can happen)' },
-	{ id: '\n\r', label: 'LFCR - \\n\\r (Just stupid)' },
+const ARGUMENT_CHOICES = [
+	{ id: 'Build', label: 'Build' },
+	{ id: 'Exit', label: 'Exit' },
+	{ id: 'Cough', label: 'Cough' },
+	{ id: 'Dump', label: 'Dump' },
+	{ id: 'Bypass', label: 'Bypass' },
+	{ id: 'Custom', label: 'Custom...' },
 ]
+
+const VARIABLE_CHOICES = [
+	{ id: 'Depth', label: 'Depth' },
+	{ id: 'PeakInput', label: 'PeakInput' },
+	{ id: 'PeakOutput', label: 'PeakOutput' },
+	{ id: 'TemperatureC', label: 'TemperatureC' },
+	{ id: 'TemperatureF', label: 'TemperatureF' },
+	{ id: 'Custom', label: 'Custom...' },
+]
+
+function resolveChoiceValue(options, choiceKey, customKey) {
+	if (options[choiceKey] === 'Custom') {
+		return options[customKey]?.trim() || ''
+	}
+	return options[choiceKey]
+}
+
+function sendLine(self, line) {
+	if (!line) return
+	if (self.socket !== undefined && self.socket.isConnected) {
+		const sendBuf = Buffer.from(`${line}\n`, 'utf8')
+		self.log('debug', `sending to ${self.config.host}: ${line}`)
+		self.socket.send(sendBuf)
+	} else {
+		self.log('debug', 'Socket not connected :(')
+	}
+}
+
+function buildArgumentOptions() {
+	return [
+		{
+			type: 'dropdown',
+			id: 'argument',
+			label: 'Argument',
+			default: 'Build',
+			choices: ARGUMENT_CHOICES,
+		},
+		{
+			type: 'textinput',
+			id: 'argument_custom',
+			label: 'Custom Argument',
+			default: '',
+			useVariables: true,
+			isVisible: (options) => options.argument === 'Custom',
+		},
+	]
+}
 
 export function getActionDefinitions(self) {
 	return {
-		send: {
-			name: 'Send Command',
-			options: [
-				{
-					type: 'textinput',
-					id: 'id_send',
-					label: 'Command:',
-					tooltip: `Use %hh to insert Hex codes\nOBSOLETE! Use the 'Send HEX command' instead`,
-					default: '',
-					useVariables: true,
-				},
-				{
-					type: 'dropdown',
-					id: 'id_end',
-					label: 'Command End Character:',
-					default: '\n',
-					choices: CHOICES_END,
-				},
-			],
+		down: {
+			name: 'Down (press/start)',
+			options: buildArgumentOptions(),
 			callback: async (action, context) => {
-				const cmd = unescape(await context.parseVariablesInString(action.options.id_send))
-
-				if (cmd != '') {
-					/*
-					 * create a binary buffer pre-encoded 'latin1' (8bit no change bytes)
-					 * sending a string assumes 'utf8' encoding
-					 * which then escapes character values over 0x7F
-					 * and destroys the 'binary' content
-					 */
-					const sendBuf = Buffer.from(cmd + action.options.id_end, 'latin1')
-
-					if (self.config.prot == 'tcp') {
-						self.log('debug', 'sending to ' + self.config.host + ': ' + sendBuf.toString())
-
-						if (self.socket !== undefined && self.socket.isConnected) {
-							self.socket.send(sendBuf)
-						} else {
-							self.log('debug', 'Socket not connected :(')
-						}
-					}
-
-					if (self.config.prot == 'udp') {
-						if (self.udp !== undefined) {
-							self.log('debug', 'sending to ' + self.config.host + ': ' + sendBuf.toString())
-
-							self.udp.send(sendBuf)
-						}
-					}
-				}
+				const arg = await context.parseVariablesInString(resolveChoiceValue(action.options, 'argument', 'argument_custom'))
+				if (arg) sendLine(self, `down ${arg}`)
 			},
 		},
-		send_hex: {
-			name: 'Send HEX encoded Command',
+		up: {
+			name: 'Up (release/end)',
+			options: buildArgumentOptions(),
+			callback: async (action, context) => {
+				const arg = await context.parseVariablesInString(resolveChoiceValue(action.options, 'argument', 'argument_custom'))
+				if (arg) sendLine(self, `up ${arg}`)
+			},
+		},
+		trigger: {
+			name: 'Trigger (momentary)',
+			options: buildArgumentOptions(),
+			callback: async (action, context) => {
+				const arg = await context.parseVariablesInString(resolveChoiceValue(action.options, 'argument', 'argument_custom'))
+				if (arg) sendLine(self, `trigger ${arg}`)
+			},
+		},
+		get: {
+			name: 'Get Variable',
 			options: [
 				{
-					type: 'textinput',
-					id: 'id_send_hex',
-					label: 'Command:',
-					tooltip: 'Decoding stops at first non-valid hex digit',
-					default: '',
-					useVariables: true,
+					type: 'dropdown',
+					id: 'variable',
+					label: 'Variable',
+					default: 'Depth',
+					choices: VARIABLE_CHOICES,
 				},
 				{
-					type: 'dropdown',
-					id: 'id_end',
-					label: 'Command End Character:',
+					type: 'textinput',
+					id: 'variable_custom',
+					label: 'Custom Variable',
 					default: '',
-					choices: CHOICES_END,
+					useVariables: true,
+					isVisible: (options) => options.variable === 'Custom',
 				},
 			],
 			callback: async (action, context) => {
-				let cmdData = await context.parseVariablesInString(action.options.id_send_hex)
-
-				// add leading '0' if odd number of characters
-				if (cmdData.length % 2) {
-					cmdData = '0' + cmdData
-				}
-				const cmd = Buffer.from(cmdData, 'hex')
-
-				if (cmd != '') {
-					/*
-					 * create a binary buffer pre-encoded 'latin1' (8bit raw bytes)
-					 * sending a default string assumes 'utf8' encoding
-					 * which then escapes character values over 0x7F
-					 * and destroys the 'binary' content
-					 */
-					const sendBuf = Buffer.concat([cmd, Buffer.from(action.options.id_end, 'latin1')])
-
-					if (self.config.prot == 'tcp') {
-						self.log('debug', 'sending to ' + self.config.host + ': ' + sendBuf.toString('hex'))
-
-						if (self.socket !== undefined && self.socket.isConnected) {
-							self.socket.send(sendBuf)
-						} else {
-							self.log('debug', 'Socket not connected :(')
-						}
-					}
-
-					if (self.config.prot == 'udp') {
-						if (self.udp !== undefined) {
-							self.log('debug', 'sending to ' + self.config.host + ': ' + sendBuf.toString('hex'))
-
-							self.udp.send(sendBuf)
-						}
-					}
-				}
+				const variable = await context.parseVariablesInString(resolveChoiceValue(action.options, 'variable', 'variable_custom'))
+				if (variable) sendLine(self, `get ${variable}`)
+			},
+		},
+		send_raw: {
+			name: 'Send Raw Command',
+			options: [
+				{
+					type: 'textinput',
+					id: 'raw_command',
+					label: 'Command',
+					default: '',
+					useVariables: true,
+				},
+			],
+			callback: async (action, context) => {
+				const line = await context.parseVariablesInString(action.options.raw_command)
+				sendLine(self, line.trim())
 			},
 		},
 	}
