@@ -25,6 +25,10 @@ This module is provided as-is. Use at your own risk. In broadcast airchains,
 test thoroughly and ensure appropriate safeguards. The authors are not
 responsible for on-air content or operational impact.
 
+## Install
+
+Download **PDM-Companion-Module-v1.0.0.tgz** from the Assets section of this release and import it into Bitfocus Companion using the *Import module package* button in the modules section on the left pane.
+
 ## Version History
 
 | Version  | Notes                                           |
