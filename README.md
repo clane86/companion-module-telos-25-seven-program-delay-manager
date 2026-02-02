@@ -1,6 +1,6 @@
 # companion-module-pdm-broadcast-delay
 
-Companion module for the **Telos 5-Seven PDM / PDM II Broadcast Delay** using the Serial Remote Control protocol over TCP.
+Companion module for the **Telos 25-Seven PDM / PDM II Broadcast Delay** using the Serial Remote Control protocol over TCP.
 
 For the easiest implementation, the preset buttons in this module are designed to mimic the front panel buttons of the PDM unit.
 
