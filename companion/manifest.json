@@ -1,12 +1,12 @@
 {
-	"id": "pdm-broadcast-delay",
-	"name": "pdm-broadcast-delay",
+	"id": "telos-25-seven-program-delay-manager",
+	"name": "telos-25-seven-program-delay-manager",
 	"shortname": "pdm",
 	"description": "PDM / PDM II Broadcast Delay (Serial Remote Control over TCP)",
 	"version": "1.0.0",
 	"license": "MIT",
-	"repository": "git+https://github.com/clane86/companion-module-pdm-broadcast-delay",
-	"bugs": "https://github.com/clane86/companion-module-pdm-broadcast-delay/issues",
+	"repository": "git+https://github.com/clane86/companion-module-telos-25-seven-program-delay-manager",
+	"bugs": "https://github.com/clane86/companion-module-telos-25-seven-program-delay-manager/issues",
 	"maintainers": [
 		{
 			"name": "Chris Lane",
