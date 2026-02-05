@@ -27,7 +27,7 @@ responsible for on-air content or operational impact.
 
 ## Install
 
-Download **PDM-Companion-Module-v1.0.0.tgz** from the Assets section of this release and import it into Bitfocus Companion using the *Import module package* button in the modules section on the left pane.
+Download **companion-module-telos-25-seven-program-delay-manager-v1.1.0.tgz** from the Assets section of this release and import it into Bitfocus Companion using the *Import module package* button in the modules section on the left pane.
 
 ## Version History
 
