@@ -1,6 +1,6 @@
 {
 	"name": "telos-25-seven-program-delay-manager",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
@@ -8,7 +8,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/clane86/companion-module-telos-25-seven-program-delay-manager"
+		"url": "git+https://github.com/bitfocus/companion-module-telos-25-seven-program-delay-manager"
 	},
 	"license": "MIT",
 	"dependencies": {
